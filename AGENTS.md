@@ -6,6 +6,14 @@ Distribution Workbench is a Kotlin desktop demonstration project for distributio
 
 Preserve meaningful engineering depth through integrated workflows, transactional operations, background processing, validation, and failure recovery.
 
+## Project Skills
+
+Read `.agents/skills/project-guide/SKILL.md` when entering the project or locating its requirements, structure, commands, and verification guidance.
+
+Follow its `references/kb-index.md` to the sources relevant to the current task. Use native skill loading when available; otherwise read the files directly.
+
+Keep shared working agreements here and detailed project knowledge with its owning documents. Loading a skill does not grant additional implementation, publication, or deployment authority.
+
 ## Technology Baseline
 
 The planned stack is:
