@@ -4,9 +4,9 @@ A Kotlin/JVM desktop application project for procurement, inventory, document pr
 
 ## Project Status
 
-The project is at the initialization stage. Application implementation has not started, and a runnable build is not available yet.
+The initial desktop foundation is implemented: four Gradle modules, a runnable JavaFX/FXML window, Koin configuration, and automated bootstrap checks.
 
-Product requirements, architecture, build tooling, and dependency versions are being defined.
+Procurement, inventory, document processing, and analytics workflows are planned. Detailed requirements and business rules are defined before their implementation.
 
 ## Planned Workflows
 
@@ -16,42 +16,80 @@ Product requirements, architecture, build tooling, and dependency versions are b
 - Process spreadsheet and PDF documents.
 - Calculate operational summaries and export reports.
 
-These workflows describe the intended direction. Detailed requirements and acceptance criteria are established before implementation.
+## Technology Stack
 
-## Planned Technology Stack
+| Area | Technology | Status |
+| --- | --- | --- |
+| Language | [Kotlin/JVM 2.4.21](https://kotlinlang.org/docs/jvm-get-started.html) | Configured |
+| Application JDK | [Eclipse Temurin 25 LTS](https://adoptium.net/support/) | Configured through Gradle toolchains |
+| Build | [Gradle 9.7.1](https://docs.gradle.org/current/userguide/gradle_wrapper.html), Kotlin DSL, and Gradle Wrapper | Configured |
+| Desktop interface | [JavaFX 27](https://openjfx.io/) and FXML | Configured |
+| Dependency injection | [Koin 4.2.2](https://insert-koin.io/docs/) | Configured for desktop startup |
+| Automated testing | [JUnit Jupiter 6.1.3](https://docs.junit.org/current/user-guide/) | Configured |
+| Code style | [ktlint Gradle plugin 14.2.0](https://github.com/JLLeitschuh/ktlint-gradle) | Configured |
+| Database | [PostgreSQL](https://www.postgresql.org/docs/) | Planned |
+| Persistence | [Exposed](https://www.jetbrains.com/help/exposed/home.html) | Planned |
+| Background processing | [Kotlin coroutines](https://kotlinlang.org/docs/coroutines-overview.html) | Planned |
+| Excel processing | [Apache POI](https://poi.apache.org/) | Planned |
+| PDF processing | [Apache PDFBox](https://pdfbox.apache.org/) | Planned |
+| Serialization | [Kotlinx Serialization](https://kotlinlang.org/docs/serialization.html) and [Jackson](https://github.com/FasterXML/jackson) | Planned |
+| Test doubles | [MockK](https://mockk.io/) | Planned |
 
-| Area | Technology |
+Dependency versions are pinned in the [version catalogue](gradle/libs.versions.toml). The Gradle distribution and its checksum are pinned in [Wrapper properties](gradle/wrapper/gradle-wrapper.properties).
+
+## Architecture
+
+The architecture is documented in [ADR 0001: Modular Desktop Architecture](docs/adr/0001-modular-desktop-architecture.md).
+
+The Gradle modules are `domain`, `application`, `infrastructure`, and `desktop`, separating business rules, use cases, adapters, and the desktop interface. The first three currently establish build boundaries; their business implementations are added with feature work.
+
+## Development Setup
+
+Prerequisites:
+
+- JDK 17 or newer to start Gradle.
+- Network access for the first dependency and toolchain downloads.
+- A graphical desktop session for running the application and UI tests.
+
+Gradle selects and, when necessary, downloads Eclipse Temurin JDK 25 for compilation, tests, and application execution. A global switch to Java 25 is not required.
+
+From a terminal on macOS:
+
+```bash
+git clone https://github.com/hawkxdev/distribution-workbench.git
+cd distribution-workbench
+./gradlew build
+./gradlew :desktop:run
+```
+
+The application currently opens the initial workspace window. Database provisioning is introduced with persistence workflows.
+
+## Verification
+
+Run commands from the repository root:
+
+| Command | Purpose |
 | --- | --- |
-| Language and runtime | [Kotlin/JVM](https://kotlinlang.org/docs/jvm-get-started.html) |
-| Desktop interface | [JavaFX](https://openjfx.io/) and FXML |
-| Database | [PostgreSQL](https://www.postgresql.org/docs/) |
-| Persistence | [Exposed](https://www.jetbrains.com/help/exposed/home.html) |
-| Dependency injection | [Koin](https://insert-koin.io/docs/) |
-| Background processing | [Kotlin coroutines](https://kotlinlang.org/docs/coroutines-overview.html) |
-| Excel processing | [Apache POI](https://poi.apache.org/) |
-| PDF processing | [Apache PDFBox](https://pdfbox.apache.org/) |
-| Serialization | [Kotlinx Serialization](https://kotlinlang.org/docs/serialization.html) and [Jackson](https://github.com/FasterXML/jackson) |
-| Automated testing | [JUnit Jupiter](https://junit.org/) and [MockK](https://mockk.io/) |
+| `./gradlew build` | Assemble modules and run verification |
+| `./gradlew check` | Run code-style checks and tests |
+| `./gradlew ktlintFormat` | Format Kotlin sources and Gradle Kotlin scripts |
+| `./gradlew :desktop:run` | Open the desktop application |
 
-This is the planned technology baseline. Exact versions and responsibilities are finalized during architecture and build setup.
+Complete formatting before starting a separate verification command.
+
+Tests cover desktop configuration validation and window composition, including FXML, CSS, and named JavaFX module loading. The UI test briefly opens and closes its own window.
+
+The foundation is verified on macOS with Apple Silicon. Windows and Linux execution and standalone application packages remain unverified.
 
 ## Engineering Focus
 
-Development focuses on connected workflows and explicit business invariants:
-
-- Transactional persistence and consistent updates.
-- Background operations with progress, cancellation, and error handling.
-- Responsive desktop interactions.
-- Repeatable imports with actionable validation diagnostics.
-- Tests for calculations, boundary conditions, and failure recovery.
+Feature development focuses on transactional persistence, responsive desktop interactions, cancellable background operations, repeatable imports, and actionable failure diagnostics.
 
 ## Demonstration Data
 
 Sample catalogues, supplier offers, inventory records, and documents use fictional data. Business rules are specified explicitly and verified through tests as their workflows are implemented.
 
-## Development Setup
-
-Installation, database setup, build, and test instructions are added when the corresponding tooling is configured and verified.
+## Project Guidance
 
 Contributor and agent working agreements are documented in [AGENTS.md](AGENTS.md).
 

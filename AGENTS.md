@@ -16,38 +16,55 @@ Keep shared working agreements here and detailed project knowledge with its owni
 
 ## Technology Baseline
 
-The planned stack is:
+| Area | Technology | State |
+| --- | --- | --- |
+| Language and runtime | Kotlin/JVM, Eclipse Temurin JDK 25 LTS | Configured |
+| Build | Gradle, Kotlin DSL, and Gradle Wrapper | Configured |
+| Desktop interface | JavaFX and FXML | Configured |
+| Dependency injection | Koin | Configured for desktop startup |
+| Automated testing | JUnit Jupiter | Configured |
+| Code style | ktlint | Configured |
+| Database and persistence | PostgreSQL and Exposed | Planned |
+| Background processing | Kotlin coroutines | Planned |
+| Excel processing | Apache POI | Planned |
+| PDF processing | Apache PDFBox | Planned |
+| Serialization | Kotlinx Serialization and Jackson | Planned |
+| Test doubles | MockK | Planned |
 
-| Area | Technology |
-| --- | --- |
-| Language and runtime | Kotlin/JVM |
-| Desktop interface | JavaFX and FXML |
-| Database | PostgreSQL |
-| Persistence | Exposed |
-| Dependency injection | Koin |
-| Background processing | Kotlin coroutines |
-| Excel processing | Apache POI |
-| PDF processing | Apache PDFBox |
-| Serialization | Kotlinx Serialization and Jackson |
-| Automated testing | JUnit Jupiter and MockK |
+Use pinned versions from `gradle/libs.versions.toml` and `gradle/wrapper/gradle-wrapper.properties`. The toolchain resolver plugin is pinned in `settings.gradle.kts`. Verify compatibility and local checks before changing these inputs.
 
-Build tooling, the JDK version, dependency versions, and module boundaries remain open decisions. Resolve them before creating the application skeleton.
+Follow [ADR 0001: Modular Desktop Architecture](docs/adr/0001-modular-desktop-architecture.md) for module boundaries and source and test mappings. Read it before changing these decisions.
 
-Use each dependency for a defined responsibility. Do not add frameworks or services solely to increase the technology count.
+Add planned dependencies when an implemented workflow gives them a defined responsibility.
 
 ## Setup and Commands
 
-Application setup, build, test, and quality commands are not configured yet.
+Run these commands from the repository root:
 
-Add exact commands here after the build tooling is selected and the commands are verified locally. Do not present proposed commands as working instructions.
+| Command | Purpose |
+| --- | --- |
+| `./gradlew build` | Assemble modules and run verification |
+| `./gradlew check` | Run code-style checks and tests |
+| `./gradlew ktlintFormat` | Format Kotlin sources and Gradle Kotlin scripts |
+| `./gradlew :desktop:run` | Launch the desktop application |
+| `./gradlew projects` | Inspect the configured module graph |
+| `./gradlew javaToolchains` | Inspect available and provisioned JDKs |
+
+A JDK 17 or newer starts Gradle. The configured toolchain selects and can provision Eclipse Temurin JDK 25 for compilation, tests, and application execution.
+
+Complete formatting in a separate invocation before verification. UI tests require a graphical desktop session and create their own temporary window.
 
 Run development tools and verification locally. Do not launch, rerun, or enable GitHub Actions execution.
 
 ## Repository Structure
 
-- `src/`: application sources.
-- `tests/`: automated tests.
-- `scripts/`: project utilities.
+- `src/<module>/build.gradle.kts`: module build configuration.
+- `src/<module>/kotlin/`: module Kotlin sources.
+- `src/<module>/resources/`: module resources when needed.
+- `tests/<module>/kotlin/`: module tests.
+- `tests/<module>/resources/`: test resources when needed.
+- `gradle/`: Wrapper metadata and the dependency version catalogue.
+- `scripts/`: project utilities when needed.
 - `specs/`: feature requirements, plans, and tasks.
 - `docs/adr/`: architecture decisions.
 - `.agents/skills/`: project-specific skills.
@@ -64,7 +81,7 @@ Do not block the JavaFX application thread with database access, document proces
 
 Verify calculations, input validation, transactional behavior, and failure recovery as their workflows are implemented.
 
-Run checks relevant to the change and report their actual results. State explicitly when a required check cannot run.
+Run checks relevant to the change and report their actual results. Distinguish a configured module from an implemented workflow and tests that executed from tasks reporting NO-SOURCE. State explicitly when a required check cannot run.
 
 ## Data and Public Independence
 

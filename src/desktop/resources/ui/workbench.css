@@ -1,0 +1,16 @@
+.workspace {
+    -fx-background-color: #f4f6fa;
+    -fx-font-family: "System";
+    -fx-padding: 48;
+}
+
+.workspace-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #15283f;
+}
+
+.workspace-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: #54667e;
+}
