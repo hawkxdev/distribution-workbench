@@ -1,0 +1,13 @@
+.memory/
+private/
+.agents/skills.manifest
+.env*
+!.env.example
+.idea/
+*.iml
+.gradle/
+.kotlin/
+build/
+target/
+*.log
+.DS_Store
